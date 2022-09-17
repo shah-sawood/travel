@@ -1,0 +1,43 @@
+:root {
+    --speed: 6;
+}
+
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes dim {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0.3;
+    }
+}
+
+#dim {
+    animation-name: dim;
+    animation-timing-function: ease-out;
+    animation-duration: 3s;
+    animation-direction: alternate-reverse;
+    animation-fill-mode: backwards;
+    animation-iteration-count: infinite;
+}
+
+#airplane {
+    animation-name: rotate;
+    animation-duration: calc(var(--speed) / 4)s;
+    animation-iteration-count: infinite;
+    animation-direction: alternate-reverse;
+}
+
+.bi-airplane-engines-fill {
+    transform: rotate(30deg);
+}

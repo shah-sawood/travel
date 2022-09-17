@@ -17,6 +17,12 @@ from django.urls import include, path
 
 from . import views
 
+flights = [
+    path("<int:flight_id>/", views.get_flight, name="flight"),
+    path("", views.get_flights, name="flights"),
+]
+
 urlpatterns = [
     path("", views.index, name="index"),
+    path("flights/", include(flights)),
 ]

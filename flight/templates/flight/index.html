@@ -1,0 +1,53 @@
+{% extends "flight/layout.html" %}
+{% load static %}
+{% block head %}
+<link rel="stylesheet" href="{% static 'flight/css/index.css' %}">
+{% endblock head %}
+{% block body %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12 p-0 position-relative" data-cover="yes">
+            <div class="position-absolute" style="top: 18%;left:20%">
+                <div class="fw-bold display-4">National<br>Travel Agency</div>
+                <div class="row g-0">
+                    <div class="col-10 col-sm-9 col-md-8 col-lg-7 col-xl-6">
+                        <div class="text-white fs-5">A travel agency is a private retailer or public service that provides travel and tourism-related services.</div>
+                    </div>
+                    <div class="col-12 pt-5">
+                        <a class="btn btn-dark" href="{% url 'flights' %}">
+                            Book a flight&nbsp;&nbsp;
+                            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-airplane-engines-fill" viewBox="0 0 16 16">
+                                <path d="M8 0c-.787 0-1.292.592-1.572 1.151A4.347 4.347 0 0 0 6 3v3.691l-2 1V7.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.191l-1.17.585A1.5 1.5 0 0 0 0 10.618V12a.5.5 0 0 0 .582.493l1.631-.272.313.937a.5.5 0 0 0 .948 0l.405-1.214 2.21-.369.375 2.253-1.318 1.318A.5.5 0 0 0 5.5 16h5a.5.5 0 0 0 .354-.854l-1.318-1.318.375-2.253 2.21.369.405 1.214a.5.5 0 0 0 .948 0l.313-.937 1.63.272A.5.5 0 0 0 16 12v-1.382a1.5 1.5 0 0 0-.83-1.342L14 8.691V7.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v.191l-2-1V3c0-.568-.14-1.271-.428-1.849C9.292.591 8.787 0 8 0ZM7 3c0-.432.11-.979.322-1.401C7.542 1.159 7.787 1 8 1c.213 0 .458.158.678.599C8.889 2.02 9 2.569 9 3v4a.5.5 0 0 0 .276.447l5.448 2.724a.5.5 0 0 1 .276.447v.792l-5.418-.903a.5.5 0 0 0-.575.41l-.5 3a.5.5 0 0 0 .14.437l.646.646H6.707l.647-.646a.5.5 0 0 0 .14-.436l-.5-3a.5.5 0 0 0-.576-.411L1 11.41v-.792a.5.5 0 0 1 .276-.447l5.448-2.724A.5.5 0 0 0 7 7V3Z" />
+                            </svg>
+                        </a>
+                    </div>
+                    <div class="col-9 mt-5 col-md-6 offset-md-2">
+                        <div class="rounded-5 bg-white p-3 text-center">
+                            {% with flights.last as latest_flight %}
+                            <div class="d-flex">
+                                <div class="">
+                                    <div class="fw-bold fs-4">{{ latest_flight.get_origin.get_city_code }}</div>
+                                    <div class="text-muted">{{ latest_flight.get_origin.get_city }}</div>
+                                </div>
+                                <div class="mx-auto" style="--speed:{{ latest_flight.get_duration }}" id="airplane">
+                                    <div class="p-2" style="color: cornflowerblue;border-top: 3px dotted cornflowerblue;border-radius: 100%;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="42" height="42" fill="currentColor" class="bi bi-airplane-engines" viewBox="0 0 16 16">
+                                            <path d="M8 0c-.787 0-1.292.592-1.572 1.151A4.347 4.347 0 0 0 6 3v3.691l-2 1V7.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.191l-1.17.585A1.5 1.5 0 0 0 0 10.618V12a.5.5 0 0 0 .582.493l1.631-.272.313.937a.5.5 0 0 0 .948 0l.405-1.214 2.21-.369.375 2.253-1.318 1.318A.5.5 0 0 0 5.5 16h5a.5.5 0 0 0 .354-.854l-1.318-1.318.375-2.253 2.21.369.405 1.214a.5.5 0 0 0 .948 0l.313-.937 1.63.272A.5.5 0 0 0 16 12v-1.382a1.5 1.5 0 0 0-.83-1.342L14 8.691V7.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v.191l-2-1V3c0-.568-.14-1.271-.428-1.849C9.292.591 8.787 0 8 0ZM7 3c0-.432.11-.979.322-1.401C7.542 1.159 7.787 1 8 1c.213 0 .458.158.678.599C8.889 2.02 9 2.569 9 3v4a.5.5 0 0 0 .276.447l5.448 2.724a.5.5 0 0 1 .276.447v.792l-5.418-.903a.5.5 0 0 0-.575.41l-.5 3a.5.5 0 0 0 .14.437l.646.646H6.707l.647-.646a.5.5 0 0 0 .14-.436l-.5-3a.5.5 0 0 0-.576-.411L1 11.41v-.792a.5.5 0 0 1 .276-.447l5.448-2.724A.5.5 0 0 0 7 7V3Z" />
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="fw-bold fs-4">{{ latest_flight.get_destination.get_city_code }}</div>
+                                    <div class="text-muted">{{ latest_flight.get_destination.get_city }}</div>
+                                </div>
+                            </div>
+                            <div id='dim'>Duration: {{ latest_flight.get_duration }} minutes</div>
+                            {% endwith %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock body %}
