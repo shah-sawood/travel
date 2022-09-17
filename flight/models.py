@@ -51,6 +51,7 @@ class Flight(models.Model):
             )
         ]
     )
+    airplane = models.CharField(max_length=75)
     duration = models.PositiveIntegerField()
     departing_time = models.DateTimeField()
 
@@ -65,9 +66,17 @@ class Flight(models.Model):
         """returns id of this airport"""
         return self.id
 
+    def get_airplane(self):
+        """returns the airplane of this flight"""
+        return self.airplane
+
     def get_origin(self):
         """returns the origin of the flight"""
         return self.origin
+
+    def get_capacity(self):
+        """returns the capacity of the flight"""
+        return self.capacity
 
     def get_passengers(self):
         """returns a list of passengers on the flight"""

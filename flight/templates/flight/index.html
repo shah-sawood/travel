@@ -23,7 +23,7 @@
                     </div>
                     <div class="col-9 mt-5 col-md-6 offset-md-2">
                         <div class="rounded-5 bg-white p-3 text-center">
-                            {% with flights.last as latest_flight %}
+                            {% with flight as latest_flight %}
                             <div class="d-flex">
                                 <div class="">
                                     <div class="fw-bold fs-4">{{ latest_flight.get_origin.get_city_code }}</div>

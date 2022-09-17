@@ -1,25 +1,22 @@
 """all backend goes here"""
-import random
-
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
-from django.contrib.auth.decorators import login_required
+from django.utils import timezone
 
 from .models import Flight, Passenger, Airport
 
 # Create your views here.
 def index(request):
     """displays all flights on home page"""
-    flights = Flight.flights.all()
+    flight = Flight.flights.first()
     context = {
-        "flights": flights,
+        "flight": flight,
         "title": "home",
     }
     return render(request, "flight/index.html", context)
 
 
-@login_required
 def get_flight(request, flight_id):
     """displays specific flight"""
     flght = Flight.flights.get(pk=flight_id)
@@ -34,7 +31,7 @@ def get_flight(request, flight_id):
 def get_flights(request):
     """display the page of the flights"""
     context = {}
-    context["flights"] = Flight.flights.all()
+    context["flights"] = Flight.flights.filter(departing_time__gt=timezone.now())
     context["title"] = "flights"
     return render(request, "flight/flights.html", context)
 
