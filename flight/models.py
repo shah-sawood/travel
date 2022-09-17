@@ -1,5 +1,6 @@
 """model of flight application"""
 from django.db import models
+from django.core.validators import MinValueValidator
 
 
 # Create your models here.
@@ -8,6 +9,7 @@ class Airport(models.Model):
 
     code = models.CharField(max_length=3, unique=True)
     city = models.CharField(max_length=64, unique=True)
+    picture = models.ImageField(upload_to="flight/images/")
 
     airports = models.Manager()
 
@@ -23,6 +25,10 @@ class Airport(models.Model):
         """returns the city code of this airport"""
         return self.code
 
+    def get_picture(self):
+        """returns picture of this"""
+        return self.picture
+
     def __str__(self):
         """returns the string representation of this airport"""
         return f"{self.city} ({self.code})"
@@ -37,11 +43,23 @@ class Flight(models.Model):
     destination = models.ForeignKey(
         Airport, on_delete=models.CASCADE, related_name="arrivals"
     )
+    capacity = models.PositiveIntegerField(
+        validators=[
+            MinValueValidator(
+                limit_value=300,
+                message="Capacity of a Flight must be greater than or equal 300",
+            )
+        ]
+    )
     duration = models.PositiveIntegerField()
     departing_time = models.DateTimeField()
-    picture = models.ImageField(upload_to="flight/images/")
 
     flights = models.Manager()
+
+    class Meta:
+        """contains meta info about this model"""
+
+        ordering = ["-departing_time"]
 
     def get_id(self):
         """returns id of this airport"""
