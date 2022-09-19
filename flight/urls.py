@@ -19,6 +19,7 @@ from django.contrib.auth.views import LogoutView
 from . import views
 
 flights = [
+    path("book/<int:flight_id>/", views.book, name="book"),
     path("<int:flight_id>/", views.get_flight, name="flight"),
     path("", views.get_flights, name="flights"),
 ]

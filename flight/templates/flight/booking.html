@@ -1,9 +1,54 @@
-{% extends "flights/layout.html" %}
+{% extends "flight/layout.html" %}
 {% block body %}
 <div class="container-fluid py-5" data-cover="yes">
     <div class="container">
         <div class="row pt-5">
-            <div class="col-12"></div>
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <table class="table table-bordered table-hover">
+                            <tbody>
+                                <tr>
+                                    <th>From</th>
+                                    <td>{{ flight.get_origin }}</td>
+                                </tr>
+                                <tr>
+                                    <th>To</th>
+                                    <td>{{ flight.get_destination }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Duration</th>
+                                    <td>{{ flight.get_duration }} minutes</td>
+                                </tr>
+                                <tr>
+                                    <th>Airline</th>
+                                    <td>{{ flight.get_airplane }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Total Capacity</th>
+                                    <td>300</td>
+                                </tr>
+                                <tr>
+                                    <th>Seats Booked</th>
+                                    <td>{{ flight.get_num_of_passengers }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="card">
+                            <div class="card-body">
+                                <form action="" method="post">
+                                    {% csrf_token %}
+                                    <div class="mb-3">
+                                        <label for="cnic" class="form-label">CNIC</label>
+                                        <input type="tel" placeholder="Enter your CNIC here" pattern="[0-9]{13}" required class="form-control" id="cnic" name="cnic">
+                                    </div>
+                                    <input type="hidden" name="passenger" value="{{ request.user.id }}">
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

@@ -1,5 +1,6 @@
 """model of flight application"""
 from django.db import models
+from django.contrib.auth.models import User
 
 
 # Create your models here.
@@ -97,8 +98,7 @@ class Flight(models.Model):
 class Passenger(models.Model):
     """passenger model"""
 
-    first = models.CharField(max_length=64)
-    last = models.CharField(max_length=64)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     cnic = models.PositiveIntegerField()
     flights = models.ManyToManyField(
         Flight,

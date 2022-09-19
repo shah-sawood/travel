@@ -56,7 +56,7 @@ def book(request, flight_id):
         flight = Flight.flights.get(pk=flight_id)
     except Flight.DoesNotExist:
         messages.error(request, "The requested flight does not exist")
-        return render(request, "flights/error.html", context)
+        return render(request, "flight/error.html", context)
     else:
         context = {"flight": flight, "title": "Book a flight"}
 
@@ -70,7 +70,7 @@ def book(request, flight_id):
                 )
             except (ValueError, Passenger.DoesNotExist):
                 context["message"] = "Something went wrong. Please try again later."
-        return render(request, "flights/book.html", context)
+        return render(request, "flight/booking.html", context)
 
 
 def add_flight(request):
