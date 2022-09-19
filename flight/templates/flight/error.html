@@ -1,0 +1,12 @@
+{% extends "flight/layout.html" %}
+{% block body %}
+<div class="container-fluid py-5" data-cover="yes">
+    <div class="row g-0">
+        <div class="col-12">
+            <div class="position-absolute justify-content-center text-danger fs-6 text-center d-flex align-items-center border rounded bg-white" style="top:50%;right: 25%; left: 25%; min-height: 150px;">
+                <div>{{ message }}</div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock body %}

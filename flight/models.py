@@ -1,6 +1,5 @@
 """model of flight application"""
 from django.db import models
-from django.core.validators import MinValueValidator
 
 
 # Create your models here.
@@ -43,14 +42,6 @@ class Flight(models.Model):
     destination = models.ForeignKey(
         Airport, on_delete=models.CASCADE, related_name="arrivals"
     )
-    capacity = models.PositiveIntegerField(
-        validators=[
-            MinValueValidator(
-                limit_value=300,
-                message="Capacity of a Flight must be greater than or equal 300",
-            )
-        ]
-    )
     airplane = models.CharField(max_length=75)
     duration = models.PositiveIntegerField()
     departing_time = models.DateTimeField()
@@ -73,10 +64,6 @@ class Flight(models.Model):
     def get_origin(self):
         """returns the origin of the flight"""
         return self.origin
-
-    def get_capacity(self):
-        """returns the capacity of the flight"""
-        return self.capacity
 
     def get_passengers(self):
         """returns a list of passengers on the flight"""

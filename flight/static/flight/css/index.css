@@ -1,7 +1,3 @@
-:root {
-    --speed: 6;
-}
-
 @keyframes rotate {
     from {
         transform: rotate(0deg);
@@ -33,7 +29,7 @@
 
 #airplane {
     animation-name: rotate;
-    animation-duration: calc(var(--speed) / 4)s;
+    animation-duration: 30s;
     animation-iteration-count: infinite;
     animation-direction: alternate-reverse;
 }

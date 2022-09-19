@@ -19,12 +19,21 @@
     <div class="container">
         <div class="row pt-5">
             <div class="col-12">
+                {% if messages %}
+                <div class="col-12">
+                    {% for message in messages %}
+                    <div class="alert alert-dismissible fade show alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %}" role="alert">
+                        {{ message }}
+                        <button class="btn-close" data-bs-target="alert" aria-label="Close"></button>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
                 <div class="row g-2">
                     {% for flight in flights %}
                     <div class="col-12 col-md-6 offset-md-3">
                         <div class="card shadow h-100">
                             <div class="card-body">
-                                <h5 class="card-title">{{ flight.get_airplane }}</h5>
                                 <div class="rounded-5 border bg-white p-3 text-center">
                                     <div class="d-flex">
                                         <div class="">
@@ -44,13 +53,12 @@
                                         </div>
                                     </div>
                                 </div>
-                                <p class="card-text"><small class="text-muted">Leaves in {{ flight.get_departing_time|timeuntil }}</small></p>
-                            </div>
-                            <img src="/static{{ flight.get_origin.get_picture.url }}" class="card-img-bottom" alt="...">
-                            <div class="card-img-overlay bg-light fw-bold" style="left:auto;top:auto;right: 5%;bottom:5%;--bs-bg-opacity:.7">
-                                <div>Total Seats: {{ flight.get_capacity }}</div>
-                                <div>Seats Booked: {{ flight.get_passengers.count }}</div>
-                                <div>Action: <a href="#" class="btn btn-sm btn-primary">Book now</a></div>
+                                <div class="list-group mt-2">
+                                    <div class="list-group-item">
+                                        <small class="text-muted">Leaves in {{ flight.get_departing_time|timeuntil }}</small>
+                                    </div>
+                                    <a href="{% url 'flight' flight.get_id %}" class="list-group-item list-group-item-action list-group-item-success">Book now</a>
+                                </div>
                             </div>
                         </div>
                     </div>

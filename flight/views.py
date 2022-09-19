@@ -1,15 +1,17 @@
 """all backend goes here"""
 from django.http import HttpResponseRedirect
+from django.contrib import messages
 from django.shortcuts import render
 from django.urls import reverse
 from django.utils import timezone
+from django.contrib.auth.decorators import login_required
 
 from .models import Flight, Passenger, Airport
 
 # Create your views here.
 def index(request):
     """displays all flights on home page"""
-    flight = Flight.flights.first()
+    flight = Flight.flights.filter(departing_time__gt=timezone.now()).first()
     context = {
         "flight": flight,
         "title": "home",
@@ -18,40 +20,57 @@ def index(request):
 
 
 def get_flight(request, flight_id):
-    """displays specific flight"""
-    flght = Flight.flights.get(pk=flight_id)
-    passengers = flight.passengers.all()
-    context = {
-        "flight": flight,
-        "passengers": passengers,
-    }
-    return render(request, "flight/flight.html", context)
+    """tries to display a specific flight"""
+    try:
+        flight = Flight.flights.get(pk=flight_id, departing_time__gt=timezone.now())
+    except Flight.DoesNotExist:
+        return render(
+            request,
+            "flight/error.html",
+            {
+                "message": "The request flight does not exist.\
+                It might have been deleted or departed.",
+            },
+        )
+    else:
+        context = {
+            "flight": flight,
+            "title": f"{flight} ({flight.get_passengers().count()})",
+        }
+        return render(request, "flight/flight.html", context)
 
 
 def get_flights(request):
-    """display the page of the flights"""
+    """display the page of the flights which are not departed yet"""
     context = {}
     context["flights"] = Flight.flights.filter(departing_time__gt=timezone.now())
     context["title"] = "flights"
     return render(request, "flight/flights.html", context)
 
 
+@login_required
 def book(request, flight_id):
     """adds a passenger to flight of flight_id"""
 
-    flight = Flight.flights.get(pk=flight_id)
-    non_passengers = models.Passenger.objects.exclude(flights=flight).all()
-    context = {"flight": flight, "non_passengers": non_passengers}
+    try:
+        flight = Flight.flights.get(pk=flight_id)
+    except Flight.DoesNotExist:
+        messages.error(request, "The requested flight does not exist")
+        return render(request, "flights/error.html", context)
+    else:
+        context = {"flight": flight, "title": "Book a flight"}
 
-    if request.method == "POST":
-        try:
-            passenger_id = int(request.POST.get("passenger"))
-            passenger = models.Passenger.objects.get(pk=passenger_id)
-            passenger.flights.add(flight)
-            return HttpResponseRedirect(reverse("flights:flight", args=(flight_id,)))
-        except (ValueError, models.Passenger.DoesNotExist):
-            context["message"] = "Something went wrong. Please try again later."
-    return render(request, "flights/book.html", context)
+        if request.method == "POST":
+            try:
+                passenger_id = int(request.POST.get("passenger"))
+                passenger = Passenger.passengers.get(pk=passenger_id)
+                passenger.flights.add(flight)
+                return HttpResponseRedirect(
+                    reverse("flights:flight", args=(flight_id,))
+                )
+            except (ValueError, Passenger.DoesNotExist):
+                context["message"] = "Something went wrong. Please try again later."
+        return render(request, "flights/book.html", context)
 
 
 def add_flight(request):
