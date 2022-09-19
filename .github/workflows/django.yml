@@ -23,8 +23,7 @@ jobs:
         python-version: ${{ matrix.python-version }}
     - name: Install Dependencies
       run: |
-        pip install django-extensions
-        pip install django
+        pip
     - name: Run Tests
       run: |
         python3 manage.py test
