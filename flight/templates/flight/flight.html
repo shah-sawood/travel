@@ -54,8 +54,18 @@
                                             <td>{{ flight.get_airplane }}</td>
                                         </tr>
                                         <tr>
+                                            <th>Price</th>
+                                            <td>$ {{ flight.get_price }}</td>
+                                        </tr>
+                                        <tr>
                                             <th>Action</th>
-                                            <td><a href="{% url 'book' flight.get_id %}" class="btn btn-sm btn-outline-dark">Book now</a></td>
+                                            <td>
+                                                <form>
+                                                    {% csrf_token %}
+                                                    <input type="hidden" value="{{ request.user.id }}" name="passenger">
+                                                    <input formaction="{% url 'book' flight.get_id %}" class="btn btn-sm btn-outline-dark" formmethod="post" value="Book now" type="submit">
+                                                </form>
+                                            </td>
                                         </tr>
                                     </tbody>
                                 </table>

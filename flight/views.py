@@ -1,10 +1,11 @@
 """all backend goes here"""
-from django.http import HttpResponseRedirect
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 from django.utils import timezone
-from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_POST
 
 from .models import Flight, Passenger, Airport
 
@@ -49,28 +50,28 @@ def get_flights(request):
 
 
 @login_required
+@require_POST
 def book(request, flight_id):
     """adds a passenger to flight of flight_id"""
 
     try:
         flight = Flight.flights.get(pk=flight_id)
-    except Flight.DoesNotExist:
-        messages.error(request, "The requested flight does not exist")
-        return render(request, "flight/error.html", context)
+        passenger_id = int(request.POST.get("passenger"))
+        passenger = Passenger.passengers.get(pk=passenger_id)
+        if not passenger.flights.contains(flight):
+            passenger.flights.add(flight)
+            passenger.cash -= flight.get_price()
+            passenger.save()
+    except (Flight.DoesNotExist, ValueError, Passenger.DoesNotExist):
+        return render(
+            request,
+            "flight/error.html",
+            {
+                "message": "Something went wrong. Please try again later.",
+            },
+        )
     else:
-        context = {"flight": flight, "title": "Book a flight"}
-
-        if request.method == "POST":
-            try:
-                passenger_id = int(request.POST.get("passenger"))
-                passenger = Passenger.passengers.get(pk=passenger_id)
-                passenger.flights.add(flight)
-                return HttpResponseRedirect(
-                    reverse("flights:flight", args=(flight_id,))
-                )
-            except (ValueError, Passenger.DoesNotExist):
-                context["message"] = "Something went wrong. Please try again later."
-        return render(request, "flight/booking.html", context)
+        return HttpResponseRedirect(reverse("flights"))
 
 
 def add_flight(request):

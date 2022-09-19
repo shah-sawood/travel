@@ -9,9 +9,6 @@
     transform: rotate(180deg);
 }
 
-[data-cover="yes"] {
-    background-blend-mode: overlay;
-}
 </style>
 {% endblock head %}
 {% block body %}
@@ -56,6 +53,7 @@
                                 <div class="list-group mt-2">
                                     <div class="list-group-item">
                                         <small class="text-muted">Leaves in {{ flight.get_departing_time|timeuntil }}</small>
+                                        <span class="float-end">Price: $ {{ flight.get_price }}</span>
                                     </div>
                                     <a href="{% url 'flight' flight.get_id %}" class="list-group-item list-group-item-action list-group-item-success">Book now</a>
                                 </div>

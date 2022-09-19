@@ -46,6 +46,7 @@ class Flight(models.Model):
     airplane = models.CharField(max_length=75)
     duration = models.PositiveIntegerField()
     departing_time = models.DateTimeField()
+    price = models.PositiveIntegerField()
 
     flights = models.Manager()
 
@@ -90,27 +91,29 @@ class Flight(models.Model):
         """returns the string representation of this airport"""
         return f"{self.origin} to {self.destination}"
 
-    def is_valid_flight(self):
-        """checks whether a flight is valid or not"""
-        return self.origin != self.destination and self.duration > 0
+    def get_price(self):
+        """returns the price of this flight"""
+        return self.price
 
 
 class Passenger(models.Model):
     """passenger model"""
 
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    cnic = models.PositiveIntegerField()
+    user = models.OneToOneField(
+        User, on_delete=models.CASCADE, related_name="as_passenger"
+    )
     flights = models.ManyToManyField(
         Flight,
         blank=True,
         related_name="passengers",
     )
+    cash = models.PositiveIntegerField(default=10000)
 
     passengers = models.Manager()
 
     def __str__(self):
         """returns the string representation of this airport"""
-        return f"{self.first}, {self.last}"
+        return f"{self.user.get_username()}"
 
     def get_id(self):
         """returns id of this airport"""
